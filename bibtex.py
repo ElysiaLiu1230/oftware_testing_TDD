@@ -1,6 +1,10 @@
 def extract_author(author):
     parts = author.split()
 
+    if "," in author:
+        surname, first = author.split(",", 1)
+        return surname.strip(), first.strip()
+    
     if len(parts) == 1:
         return parts[0], ""
 
@@ -8,11 +12,12 @@ def extract_author(author):
         first, surname = parts
         return surname, first
     
-    if "," in author:
-        surname, first = author.split(",", 1)
-        return surname.strip(), first.strip()
-
     # len(parts) > 2
     surname = parts[-1]
     first = " ".join(parts[:-1])
     return surname, first
+
+def extract_authors(authors):
+    names = authors.split(" and ")
+    return [extract_author(name) for name in names]
+

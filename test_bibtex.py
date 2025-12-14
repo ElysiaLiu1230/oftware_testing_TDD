@@ -41,6 +41,10 @@ def test_surname_first(setup_data):
     (Surname, First) = bibtex.extract_author(setup_data['surname_first_2'])
     assert (Surname, First) == ("Van Hentenryck", "Pascal")
 
+def test_multiple_authors(setup_data):
+    Authors = bibtex.extract_authors(setup_data['multiple_authors_1'])
+    assert Authors[0] == ('Pearson', 'Justin')
+    assert Authors[1] == ('Jones', 'Bob')
 
 
 
