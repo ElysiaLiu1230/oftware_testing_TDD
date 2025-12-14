@@ -27,7 +27,6 @@ def test_author_1(setup_data):
     assert (Surname, FirstNames) == ('Jones', '')
 
 ===================================================== FAILURES ======================================================
-___________________________________________________ test_author_1 ___________________________________________________
 
 setup_data = {'author_1': 'John Smith', 'author_2': 'Bob Jones', 'author_3': 'Justin Kenneth Pearson', 'multiple_authors_1': 'Pearson, Justin and Jones, Bob', ...}
 
@@ -50,3 +49,56 @@ test_bibtex.py .                                                                
 
 ================================================= 1 passed in 0.02s =================================================
 
+RED
+
+add test2
+
+def test_author_2(setup_data):
+    # Test simple firstname author.
+    (Surname, First) = bibtex.extract_author(setup_data['author_1'])
+    assert (Surname, First) == ("Smith", "John")
+
+    (Surname, First) = bibtex.extract_author(setup_data['author_2'])
+    assert (Surname, First) == ("Jones", "Bob")
+
+====================================================== FAILURES ======================================================
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 50%]
+test_bibtex.py::test_author_2 FAILED                                                                           [100%]
+
+setup_data = {'author_1': 'John Smith', 'author_2': 'Bob Jones', 'author_3': 'Justin Kenneth Pearson', 'multiple_authors_1': 'Pearson, Justin and Jones, Bob', ...}
+
+    def test_author_2(setup_data):
+        # Test simple firstname author.
+        (Surname, First) = bibtex.extract_author(setup_data['author_1'])
+>       assert (Surname, First) == ("Smith", "John")
+E       AssertionError: assert ('John Smith', '') == ('Smith', 'John')
+E         At index 0 diff: 'John Smith' != 'Smith'
+E         Full diff:
+E         - ('Smith', 'John')
+E         + ('John Smith', '')
+
+test_bibtex.py:28: AssertionError
+
+=====================================================================================================================
+
+GREEN
+
+add condition for full name
+
+def extract_author(author):
+    parts = author.split()
+
+    if len(parts) == 2:
+        first, surname = parts
+        return surname, first
+
+    return author, ""
+
+=====================================================================================================================
+collected 2 items                                                                                                     
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 50%] 
+test_bibtex.py::test_author_2 PASSED                                                                           [100%] 
+
+================================================= 2 passed in 0.02s ================================================= 
