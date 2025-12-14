@@ -102,3 +102,59 @@ test_bibtex.py::test_author_1 PASSED                                            
 test_bibtex.py::test_author_2 PASSED                                                                           [100%] 
 
 ================================================= 2 passed in 0.02s ================================================= 
+
+RED
+
+Add test_author_3 to distinguish authors with multiple first names
+
+def test_author_3(setup_data):
+    (Surname, First) = bibtex.extract_author(setup_data['author_3'])
+    assert (Surname, First) == ("Pearson", "Justin Kenneth")
+
+===================================================== FAILURES ====================================================== 
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 33%]
+test_bibtex.py::test_author_2 PASSED                                                                           [ 66%] 
+test_bibtex.py::test_author_3 FAILED                                                                           [100%]
+
+setup_data = {'author_1': 'John Smith', 'author_2': 'Bob Jones', 'author_3': 'Justin Kenneth Pearson', 'multiple_authors_1': 'Pearson, Justin and Jones, Bob', ...}
+
+    def test_author_3(setup_data):
+        (Surname, First) = bibtex.extract_author(setup_data['author_3'])
+>       assert (Surname, First) == ("Pearson", "Justin Kenneth")
+E       AssertionError: assert ('Justin Kenneth Pearson', '') == ('Pearson', 'Justin Kenneth')
+E         At index 0 diff: 'Justin Kenneth Pearson' != 'Pearson'
+E         Full diff:
+E         - ('Pearson', 'Justin Kenneth')
+E         + ('Justin Kenneth Pearson', '')
+
+test_bibtex.py:35: AssertionError
+=====================================================================================================================
+GREEN
+
+Add condition for multiple first names
+
+def extract_author(author):
+    parts = author.split()
+
+    if len(parts) == 1:
+        return parts[0], ""
+
+    if len(parts) == 2:
+        first, surname = parts
+        return surname, first
+
+    # len(parts) > 2
+    surname = parts[-1]
+    first = " ".join(parts[:-1])
+    return surname, first
+
+=====================================================================================================================
+collected 3 items                                                                                                    
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 33%]
+test_bibtex.py::test_author_2 PASSED                                                                           [ 66%]
+test_bibtex.py::test_author_3 PASSED                                                                           [100%]
+
+================================================= 3 passed in 0.02s =================================================
+
