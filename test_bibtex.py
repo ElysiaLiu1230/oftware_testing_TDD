@@ -33,5 +33,14 @@ def test_author_2(setup_data):
 def test_author_3(setup_data):
     (Surname, First) = bibtex.extract_author(setup_data['author_3'])
     assert (Surname, First) == ("Pearson", "Justin Kenneth")
+    
+def test_surname_first(setup_data):
+    (Surname, First) = bibtex.extract_author(setup_data['surname_first_1'])
+    assert (Surname, First) == ("Pearson", "Justin Kenneth")
+
+    (Surname, First) = bibtex.extract_author(setup_data['surname_first_2'])
+    assert (Surname, First) == ("Van Hentenryck", "Pascal")
+
+
 
 

@@ -158,3 +158,70 @@ test_bibtex.py::test_author_3 PASSED                                            
 
 ================================================= 3 passed in 0.02s =================================================
 
+RED
+
+add test surname_first
+
+def test_surname_first(setup_data):
+    (Surname, First) = bibtex.extract_author(setup_data['surname_first_1'])
+    assert (Surname, First) == ("Pearson", "Justin Kenneth")
+
+    (Surname, First) = bibtex.extract_author(setup_data['surname_first_2'])
+    assert (Surname, First) == ("Van Hentenryck", "Pascal")
+
+===================================================== FAILURES ====================================================== 
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 25%] 
+test_bibtex.py::test_author_2 PASSED                                                                           [ 50%] 
+test_bibtex.py::test_author_3 PASSED                                                                           [ 75%] 
+test_bibtex.py::test_surname_first FAILED                                                                      [100%]
+
+________________________________________________ test_surname_first _________________________________________________ 
+
+setup_data = {'author_1': 'John Smith', 'author_2': 'Bob Jones', 'author_3': 'Justin Kenneth Pearson', 'multiple_authors_1': 'Pearson, Justin and Jones, Bob', ...}
+
+    def test_surname_first(setup_data):
+        (Surname, First) = bibtex.extract_author(setup_data['surname_first_1'])
+>       assert (Surname, First) == ("Pearson", "Justin Kenneth")
+E       AssertionError: assert ('Kenneth', 'Pearson, Justin') == ('Pearson', 'Justin Kenneth')
+E         At index 0 diff: 'Kenneth' != 'Pearson'
+E         Full diff:
+E         - ('Pearson', 'Justin Kenneth')
+E         + ('Kenneth', 'Pearson, Justin')
+
+test_bibtex.py:39: AssertionError
+
+======================================================================================================================
+
+GREEN
+
+add condition for containing ","
+
+def extract_author(author):
+    parts = author.split()
+
+    if len(parts) == 1:
+        return parts[0], ""
+
+    if len(parts) == 2:
+        first, surname = parts
+        return surname, first
+    
+    if "," in author:
+        surname, first = author.split(",", 1)
+        return surname.strip(), first.strip()
+
+    # len(parts) > 2
+    surname = parts[-1]
+    first = " ".join(parts[:-1])
+    return surname, first
+
+==================================================================================================================
+collected 4 items                                                                                                     
+
+test_bibtex.py::test_author_1 PASSED                                                                           [ 25%] 
+test_bibtex.py::test_author_2 PASSED                                                                           [ 50%] 
+test_bibtex.py::test_author_3 PASSED                                                                           [ 75%] 
+test_bibtex.py::test_surname_first PASSED                                                                      [100%] 
+
+================================================= 4 passed in 0.02s ================================================= 
